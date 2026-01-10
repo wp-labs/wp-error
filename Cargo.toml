@@ -4,6 +4,13 @@ version = "0.7.0"
 edition = "2024"
 license = "Elastic-2.0"
 authors = ["WarpParse Dev Team"]
+description = "Structured, domain-specific error types and robustness strategies extracted from WarpParse"
+documentation = "https://docs.rs/wp-error"
+repository = "https://github.com/wp-labs/wp-error"
+homepage = "https://github.com/wp-labs/wp-error"
+readme = "README.md"
+keywords = ["error", "robustness", "warp-parse", "orion", "wp"]
+categories = ["config", "rust-patterns", "development-tools::debugging"]
 
 [lib]
 name = "wp_err"
