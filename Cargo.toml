@@ -1,0 +1,37 @@
+[package]
+name = "wp-error"
+version = "0.7.0"
+edition = "2024"
+license = "Elastic-2.0"
+authors = ["WarpParse Dev Team"]
+
+[lib]
+name = "wp_err"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+[dependencies]
+orion-error = "0.5"
+orion-variate= "0.10"
+orion-sec = "0.3"
+
+wp-log = "0.1"
+#wp_parse_api = { workspace = true }
+log = "0.4"
+toml = "0.9"
+orion_conf =  { version = "0.4", features = ["toml"]}
+winnow = "0.7"
+derive_more = "2.1"
+wp-connector-api =  "0.7"
+wp-model-core    =  "0.7"
+
+unicode-segmentation = "1.12"
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2.0"
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+strum_macros = "0.27"
+anyhow = "1.0"
+log4rs = { version = "1.4", features = ["gzip"] }
+getset = "0.1"
