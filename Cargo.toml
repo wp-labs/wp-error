@@ -1,6 +1,6 @@
 [package]
 name = "wp-error"
-version = "0.7.6"
+version = "0.7.7"
 edition = "2024"
 license = "Elastic-2.0"
 authors = ["WarpParse Dev Team"]
@@ -31,7 +31,7 @@ orion_conf =  { version = "0.4", features = ["toml"]}
 winnow = "0.7"
 derive_more = "2.1"
 wp-connector-api =  "0.7"
-wp-model-core    =  "0.7"
+wp-model-core    =  "0.8"
 
 unicode-segmentation = "1.12"
 serde = { version = "1.0", features = ["derive"] }

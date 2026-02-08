@@ -1,7 +1,7 @@
 use orion_error::ErrorCode;
 use std::marker::PhantomData;
 use wp_connector_api::{SinkReason, SourceReason};
-use wp_err::{
+use wp_error::{
     codes::SysErrorCode,
     config_error::{ConfCore, ConfReason},
     parse_error::OMLCodeReason,
@@ -42,8 +42,8 @@ fn test_sys_codes_source_and_run() {
 fn test_conf_take_propagation() {
     // Ensure _Take can be converted without panic
     let take = ConfReason::<ConfCore>::_Take(PhantomData);
-    let _f: ConfReason<wp_err::config_error::ConfFeature> = take.clone().into();
-    let _d: ConfReason<wp_err::config_error::ConfDynamic> = take.into();
+    let _f: ConfReason<wp_error::config_error::ConfFeature> = take.clone().into();
+    let _d: ConfReason<wp_error::config_error::ConfDynamic> = take.into();
 }
 
 #[test]
@@ -67,7 +67,7 @@ fn test_source_other_preserves_code() {
 
 #[test]
 fn test_robust_mode_from_str_fallback() {
-    use wp_err::error_handling::RobustnessMode;
+    use wp_error::error_handling::RobustnessMode;
     // unknown should fallback to Debug instead of panic
     let m: RobustnessMode = "unknown-mode".into();
     assert_eq!(format!("{}", m), "debug");
