@@ -19,7 +19,7 @@ name = "wp_error"
 
 
 [dependencies]
-orion-error = "0.5"
+orion-error = "0.6"
 orion-variate= "0.10"
 orion-sec = "0.3"
 
