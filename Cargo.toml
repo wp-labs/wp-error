@@ -27,7 +27,7 @@ wp-log = "0.1"
 #wp_parse_api = { workspace = true }
 log = "0.4"
 toml = "0.9"
-orion_conf =  { version = "0.4", features = ["toml"]}
+orion_conf =  { version = "0.5", features = ["toml"]}
 winnow = "0.7"
 derive_more = "2.1"
 wp-connector-api =  "0.7"
