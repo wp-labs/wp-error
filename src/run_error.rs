@@ -67,7 +67,6 @@ impl From<OrionSecReason> for RunReason {
     }
 }
 
-
 pub trait RunErrorOwe<T> {
     fn owe_sink(self) -> RunResult<T>;
     fn owe_source(self) -> RunResult<T>;

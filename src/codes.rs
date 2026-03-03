@@ -443,7 +443,6 @@ mod tests {
         assert_eq!(reason.sys_code(), 50209);
     }
 
-
     // SinkReason tests
     #[test]
     fn test_sink_sink_code() {
@@ -463,7 +462,6 @@ mod tests {
         let reason = SinkReason::StgCtrl;
         assert_eq!(reason.sys_code(), 50311);
     }
-
 
     // KnowledgeReason tests
     #[test]
