@@ -1,6 +1,6 @@
 [package]
 name = "wp-error"
-version = "0.8.1"
+version = "0.8.2"
 edition = "2024"
 license = "Elastic-2.0"
 authors = ["WarpParse Dev Team"]
@@ -23,7 +23,7 @@ orion-error = "0.6"
 orion-variate= "0.11"
 orion-sec = "0.4"
 
-wp-log = "0.1"
+wp-log = "0.2"
 #wp_parse_api = { workspace = true }
 log = "0.4"
 toml = "1.0"
