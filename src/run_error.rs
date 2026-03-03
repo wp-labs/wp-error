@@ -1,7 +1,7 @@
 use crate::parse_error::OMLCodeReason;
 use crate::{ConfReason, config_error::ConfCore};
 use derive_more::From;
-use orion_error::{ConfErrReason, ErrorCode, StructError, UvsConfFrom, UvsReason};
+use orion_error::{ConfErrReason, ErrorCode, StructError, UvsFrom, UvsReason};
 use orion_sec::OrionSecReason;
 use serde::Serialize;
 use thiserror::Error;
@@ -48,26 +48,25 @@ impl ErrorCode for RunReason {
 }
 
 impl From<ConfReason<ConfCore>> for RunReason {
-    fn from(value: ConfReason<ConfCore>) -> Self {
-        Self::Uvs(UvsReason::from_conf(ConfErrReason::Core(value.to_string())))
+    fn from(_: ConfReason<ConfCore>) -> Self {
+        Self::from_conf_reason(ConfErrReason::Core)
     }
 }
 impl From<OMLCodeReason> for RunReason {
-    fn from(value: OMLCodeReason) -> Self {
-        Self::Uvs(UvsReason::from_conf(value.to_string()))
+    fn from(_: OMLCodeReason) -> Self {
+        Self::from_conf()
     }
 }
 
 impl From<OrionSecReason> for RunReason {
     fn from(value: OrionSecReason) -> Self {
         match value {
-            OrionSecReason::Sec(sec_reason) => {
-                Self::Uvs(UvsReason::from_conf(sec_reason.to_string()))
-            }
+            OrionSecReason::Sec(_) => Self::from_conf(),
             OrionSecReason::Uvs(uvs_reason) => Self::Uvs(uvs_reason),
         }
     }
 }
+
 
 pub trait RunErrorOwe<T> {
     fn owe_sink(self) -> RunResult<T>;
@@ -143,9 +142,9 @@ use wp_connector_api::{SinkReason, SourceReason};
 impl From<ConfIOReason> for RunReason {
     fn from(value: ConfIOReason) -> Self {
         match value {
-            ConfIOReason::Other(msg) => RunReason::from_conf(msg),
+            ConfIOReason::Other(_) => RunReason::from_conf(),
             ConfIOReason::Uvs(uvs) => RunReason::Uvs(uvs),
-            ConfIOReason::NoFormatEnabled => RunReason::from_conf("fmt unsupport"),
+            ConfIOReason::NoFormatEnabled => RunReason::from_conf(),
         }
     }
 }

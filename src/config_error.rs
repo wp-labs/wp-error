@@ -1,7 +1,7 @@
 use std::marker::PhantomData;
 
 use derive_more::From;
-use orion_error::{ConfErrReason, ErrorCode, StructError, UvsConfFrom, UvsReason};
+use orion_error::{ConfErrReason, ErrorCode, StructError, UvsFrom, UvsReason};
 use serde::Serialize;
 use thiserror::Error;
 
@@ -65,21 +65,18 @@ pub type DynConfResult<T> = Result<T, DynamicConfError>;
 pub type FeatureConfResult<T> = Result<T, FeatureConfError>;
 
 impl From<ConfReason<ConfCore>> for UvsReason {
-    fn from(e: ConfReason<ConfCore>) -> Self {
-        let error = format!("{}", e);
-        UvsReason::from_conf(ConfErrReason::Core(error))
+    fn from(_: ConfReason<ConfCore>) -> Self {
+        UvsReason::from_conf_reason(ConfErrReason::Core)
     }
 }
 impl From<ConfReason<ConfFeature>> for UvsReason {
-    fn from(e: ConfReason<ConfFeature>) -> Self {
-        let error = format!("{}", e);
-        UvsReason::feature_conf(error)
+    fn from(_: ConfReason<ConfFeature>) -> Self {
+        UvsReason::feature_conf()
     }
 }
 impl From<ConfReason<ConfDynamic>> for UvsReason {
-    fn from(e: ConfReason<ConfDynamic>) -> Self {
-        let error = format!("{}", e);
-        UvsReason::dynamic_conf(error)
+    fn from(_: ConfReason<ConfDynamic>) -> Self {
+        UvsReason::dynamic_conf()
     }
 }
 

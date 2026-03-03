@@ -1,9 +1,8 @@
 use derive_more::From;
 use orion_error::ErrorCode;
 use orion_error::StructError;
-use orion_error::UvsDataFrom;
+use orion_error::UvsFrom;
 use orion_error::UvsReason;
-use orion_error::UvsResFrom;
 use serde::Serialize;
 use thiserror::Error;
 
@@ -77,8 +76,8 @@ pub enum DataErrKind {
     LessDef(String),
 }
 impl From<DataErrKind> for OMLCodeReason {
-    fn from(value: DataErrKind) -> Self {
-        OMLCodeReason::from(UvsReason::from_data(format!("{}", value), None))
+    fn from(_: DataErrKind) -> Self {
+        OMLCodeReason::from_data()
     }
 }
 pub type OmlCodeResult<T> = Result<T, OMLCodeError>;
@@ -86,7 +85,7 @@ pub type OmlCodeResult<T> = Result<T, OMLCodeError>;
 // ParseError<&str, ContextError<StrContext>>
 
 impl From<OMLCodeReason> for UvsReason {
-    fn from(value: OMLCodeReason) -> Self {
-        UvsReason::from_res(value.to_string())
+    fn from(_: OMLCodeReason) -> Self {
+        UvsReason::from_res()
     }
 }
