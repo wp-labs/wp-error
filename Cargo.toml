@@ -28,7 +28,7 @@ wp-log = "0.2"
 log = "0.4"
 toml = "1.0"
 orion_conf =  { version = "0.5", features = ["toml"]}
-winnow = "0.7"
+winnow = "1.0"
 derive_more = "2.1"
 wp-connector-api =  "0.8"
 wp-model-core    =  "0.8"
