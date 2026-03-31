@@ -1,6 +1,6 @@
 [package]
 name = "wp-error"
-version = "0.8.2"
+version = "0.8.3" # @gxl:set(version)
 edition = "2024"
 license = "Elastic-2.0"
 authors = ["WarpParse Dev Team"]
@@ -20,25 +20,14 @@ name = "wp_error"
 
 [dependencies]
 orion-error = "0.6"
-orion-variate= "0.11"
 orion-sec = "0.4"
 
 wp-log = "0.2"
-#wp_parse_api = { workspace = true }
-log = "0.4"
-toml = "1.0"
 orion_conf =  { version = "0.5", features = ["toml"]}
-winnow = "0.7"
 derive_more = "2.1"
 wp-connector-api =  "0.8"
-wp-model-core    =  "0.8"
 
 unicode-segmentation = "1.12"
 serde = { version = "1.0", features = ["derive"] }
 thiserror = "2.0"
 serde_json = "1.0"
-chrono = { version = "0.4", features = ["serde"] }
-strum_macros = "0.27"
-anyhow = "1.0"
-log4rs = { version = "1.4", features = ["gzip"] }
-getset = "0.1"
