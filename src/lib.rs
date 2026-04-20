@@ -1,5 +1,6 @@
 pub mod codes;
 pub mod config_error;
+pub mod diagnostic_meta;
 pub mod error_handling;
 pub mod http_map;
 pub mod http_respond;
@@ -10,6 +11,7 @@ pub mod util;
 
 pub use codes::SysErrorCode;
 pub use config_error::*;
+pub use diagnostic_meta::*;
 pub use http_map::{http_status_for_reason, http_status_for_sys};
 pub use http_respond::{
     ErrorResponse, build_error_response, error_response_json, error_response_text,
