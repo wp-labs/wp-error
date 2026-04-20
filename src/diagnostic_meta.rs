@@ -319,10 +319,12 @@ impl OperationContextMetaExt for OperationContext {
 }
 
 pub fn first_meta_str<'a>(report: &'a ErrorReport, key: &str) -> Option<&'a str> {
-    report
-        .root_metadata
-        .get_str(key)
-        .or_else(|| report.source_frames.iter().find_map(|frame| frame.metadata.get_str(key)))
+    report.root_metadata.get_str(key).or_else(|| {
+        report
+            .source_frames
+            .iter()
+            .find_map(|frame| frame.metadata.get_str(key))
+    })
 }
 
 pub fn first_meta_enum<M: MetaValue>(report: &ErrorReport) -> Option<M> {
@@ -340,7 +342,10 @@ mod tests {
 
     #[test]
     fn config_kind_round_trip() {
-        assert_eq!(ConfigKind::parse(ConfigKind::Wpsrc.as_str()), Some(ConfigKind::Wpsrc));
+        assert_eq!(
+            ConfigKind::parse(ConfigKind::Wpsrc.as_str()),
+            Some(ConfigKind::Wpsrc)
+        );
         assert_eq!(
             ConfigKind::parse(ConfigKind::SinkDefaults.as_str()),
             Some(ConfigKind::SinkDefaults)
@@ -383,7 +388,10 @@ mod tests {
             source_frames: Vec::new(),
         };
 
-        assert_eq!(first_meta_enum::<ConfigKind>(&report), Some(ConfigKind::SinkRoute));
+        assert_eq!(
+            first_meta_enum::<ConfigKind>(&report),
+            Some(ConfigKind::SinkRoute)
+        );
     }
 
     #[test]
@@ -406,6 +414,9 @@ mod tests {
             is_root_cause: true,
         };
 
-        assert_eq!(frame_meta_enum::<ConfigGroup>(&frame), Some(ConfigGroup::Infra));
+        assert_eq!(
+            frame_meta_enum::<ConfigGroup>(&frame),
+            Some(ConfigGroup::Infra)
+        );
     }
 }
