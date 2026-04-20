@@ -331,6 +331,10 @@ pub fn first_meta_enum<M: MetaValue>(report: &ErrorReport) -> Option<M> {
     first_meta_str(report, M::KEY).and_then(M::parse)
 }
 
+pub fn first_meta_hint(report: &ErrorReport) -> Option<HintCode> {
+    first_meta_enum::<HintCode>(report)
+}
+
 pub fn frame_meta_enum<M: MetaValue>(frame: &SourceFrame) -> Option<M> {
     frame.metadata.get_str(M::KEY).and_then(M::parse)
 }
