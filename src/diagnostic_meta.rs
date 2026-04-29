@@ -1,8 +1,8 @@
 use std::path::Path;
 
+use orion_error::OperationContext;
 use orion_error::report::DiagnosticReport;
 use orion_error::runtime::SourceFrame;
-use orion_error::OperationContext;
 
 pub mod key {
     pub const CONFIG_KIND: &str = "config.kind";
