@@ -1,4 +1,4 @@
-use orion_error::ErrStrategy;
+use orion_error::types::ErrStrategy;
 use serde::{Deserialize, Serialize};
 use std::{
     fmt::Formatter,

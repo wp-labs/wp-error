@@ -1,9 +1,10 @@
+use std::fmt::Debug;
 use std::marker::PhantomData;
 
 use derive_more::From;
-use orion_error::{ConfErrReason, ErrorCode, StructError, UvsFrom, UvsReason};
+use orion_error::reason::ConfErrReason;
+use orion_error::{OrionError, StructError, UvsFrom, UvsReason};
 use serde::Serialize;
-use thiserror::Error;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ConfCore {}
@@ -19,37 +20,17 @@ pub enum ConfType {
     Dynamic,
 }
 
-#[derive(Error, Debug, Clone, PartialEq, Serialize, From)]
-pub enum ConfReason<T>
-where
-    T: Clone + PartialEq,
-{
-    #[error("syntax err:{0}")]
+#[derive(Debug, Clone, PartialEq, Serialize, From, OrionError)]
+pub enum ConfReason<T: Clone + PartialEq + Debug + Send + Sync + 'static> {
+    #[orion_error(identity = "conf.syntax")]
     Syntax(String),
+    #[orion_error(identity = "conf.not_found")]
     #[from(skip)]
-    #[error("not found: {0}")]
     NotFound(String),
-    #[error("{0}")]
+    #[orion_error(transparent)]
     Uvs(UvsReason),
-    #[error("_")]
+    #[orion_error(identity = "conf.take")]
     _Take(PhantomData<T>),
-}
-impl ErrorCode for ConfReason<ConfCore> {
-    fn error_code(&self) -> i32 {
-        crate::codes::SysErrorCode::sys_code(self) as i32
-    }
-}
-
-impl ErrorCode for ConfReason<ConfFeature> {
-    fn error_code(&self) -> i32 {
-        crate::codes::SysErrorCode::sys_code(self) as i32
-    }
-}
-
-impl ErrorCode for ConfReason<ConfDynamic> {
-    fn error_code(&self) -> i32 {
-        crate::codes::SysErrorCode::sys_code(self) as i32
-    }
 }
 
 pub type ConfError = StructError<ConfReason<ConfCore>>;

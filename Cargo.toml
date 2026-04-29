@@ -1,6 +1,6 @@
 [package]
 name = "wp-error"
-version = "0.8.5" # @gxl:set(version)
+version = "0.9.0" # @gxl:set(version)
 edition = "2024"
 license = "Elastic-2.0"
 authors = ["WarpParse Dev Team"]

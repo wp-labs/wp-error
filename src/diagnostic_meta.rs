@@ -1,6 +1,8 @@
 use std::path::Path;
 
-use orion_error::{ErrorReport, OperationContext, SourceFrame};
+use orion_error::report::DiagnosticReport;
+use orion_error::runtime::SourceFrame;
+use orion_error::OperationContext;
 
 pub mod key {
     pub const CONFIG_KIND: &str = "config.kind";
@@ -318,7 +320,7 @@ impl OperationContextMetaExt for OperationContext {
     }
 }
 
-pub fn first_meta_str<'a>(report: &'a ErrorReport, key: &str) -> Option<&'a str> {
+pub fn first_meta_str<'a>(report: &'a DiagnosticReport, key: &str) -> Option<&'a str> {
     report.root_metadata.get_str(key).or_else(|| {
         report
             .source_frames
@@ -327,11 +329,11 @@ pub fn first_meta_str<'a>(report: &'a ErrorReport, key: &str) -> Option<&'a str>
     })
 }
 
-pub fn first_meta_enum<M: MetaValue>(report: &ErrorReport) -> Option<M> {
+pub fn first_meta_enum<M: MetaValue>(report: &DiagnosticReport) -> Option<M> {
     first_meta_str(report, M::KEY).and_then(M::parse)
 }
 
-pub fn first_meta_hint(report: &ErrorReport) -> Option<HintCode> {
+pub fn first_meta_hint(report: &DiagnosticReport) -> Option<HintCode> {
     first_meta_enum::<HintCode>(report)
 }
 
@@ -342,7 +344,7 @@ pub fn frame_meta_enum<M: MetaValue>(frame: &SourceFrame) -> Option<M> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use orion_error::ErrorMetadata;
+    use orion_error::types::ErrorMetadata;
 
     #[test]
     fn config_kind_round_trip() {
@@ -358,7 +360,7 @@ mod tests {
 
     #[test]
     fn operation_context_meta_ext_records_typed_and_path_metadata() {
-        let ctx = OperationContext::want("load")
+        let ctx = OperationContext::doing("load")
             .with_meta_value(ConfigKind::Wpsrc)
             .with_meta_value(OperationKind::LoadConfigFile)
             .with_file_path(Path::new("/tmp/wpsrc.toml"))
@@ -381,7 +383,7 @@ mod tests {
         let mut root = ErrorMetadata::new();
         root.insert(key::CONFIG_KIND, ConfigKind::SinkRoute.as_str());
 
-        let report = ErrorReport {
+        let report = DiagnosticReport {
             reason: "configuration error".to_string(),
             detail: None,
             position: None,

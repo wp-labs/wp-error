@@ -1,7 +1,8 @@
 use crate::parse_error::OMLCodeReason;
 use crate::{ConfReason, config_error::ConfCore};
 use derive_more::From;
-use orion_error::{ConfErrReason, ErrorCode, StructError, UvsFrom, UvsReason};
+use orion_error::reason::ConfErrReason;
+use orion_error::{OrionError, StructError, UvsFrom, UvsReason};
 use orion_sec::OrionSecReason;
 use serde::Serialize;
 use thiserror::Error;
@@ -31,20 +32,14 @@ pub enum SourceFocus {
     Disconnect(String),
 }
 
-#[derive(Debug, Error, PartialEq, Serialize, From)]
+#[derive(Debug, PartialEq, Serialize, From, OrionError)]
 pub enum RunReason {
-    #[error("sink error {0}")]
+    #[orion_error(identity = "biz.dist")]
     Dist(DistFocus),
-    #[error("source error {0}")]
+    #[orion_error(identity = "biz.source")]
     Source(SourceFocus),
-    #[error("{0}")]
+    #[orion_error(transparent)]
     Uvs(UvsReason),
-}
-
-impl ErrorCode for RunReason {
-    fn error_code(&self) -> i32 {
-        crate::codes::SysErrorCode::sys_code(self) as i32
-    }
 }
 
 impl From<ConfReason<ConfCore>> for RunReason {

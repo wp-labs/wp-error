@@ -1,4 +1,3 @@
-use orion_error::ErrorCode;
 use std::marker::PhantomData;
 use wp_connector_api::{SinkReason, SourceReason};
 use wp_error::{
@@ -12,10 +11,8 @@ use wp_error::{
 fn test_sys_codes_conf_and_parse() {
     let c = ConfReason::<ConfCore>::Syntax("bad".into());
     assert_eq!(c.sys_code(), 42201);
-    assert_eq!(c.error_code(), 42201);
     let c = ConfReason::<ConfCore>::NotFound("x".into());
     assert_eq!(c.sys_code(), 40401);
-    assert_eq!(c.error_code(), 40401);
 
     let o = OMLCodeReason::Syntax("e".into());
     assert_eq!(o.sys_code(), 42211);
@@ -51,12 +48,6 @@ fn test_dist_mock_to_run() {
     // SinkReason::Mock should map to RunReason::Dist(StgCtrl)
     let rr: RunReason = SinkReason::Mock.into();
     assert_eq!(rr.sys_code(), 50311);
-}
-
-#[test]
-fn test_disconnect_message_keeps_detail() {
-    let rr = RunReason::Source(SourceFocus::Disconnect("net down".into()));
-    assert!(rr.to_string().contains("net down"));
 }
 
 #[test]

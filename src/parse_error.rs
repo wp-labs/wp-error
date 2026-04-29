@@ -1,56 +1,17 @@
 use derive_more::From;
-use orion_error::ErrorCode;
-use orion_error::StructError;
-use orion_error::UvsFrom;
-use orion_error::UvsReason;
+use orion_error::{OrionError, StructError, UvsFrom, UvsReason};
 use serde::Serialize;
 use thiserror::Error;
 
-/*
-fn translate_position(input: &[u8], index: usize) -> (usize, usize) {
-    if input.is_empty() {
-        return (0, index);
-    }
-
-    let safe_index = index.min(input.len() - 1);
-    let column_offset = index - safe_index;
-    let index = safe_index;
-
-    let nl = input[0..index]
-        .iter()
-        .rev()
-        .enumerate()
-        .find(|(_, b)| **b == b'\n')
-        .map(|(nl, _)| index - nl - 1);
-    let line_start = match nl {
-        Some(nl) => nl + 1,
-        None => 0,
-    };
-    let line = input[0..line_start].iter().filter(|b| **b == b'\n').count();
-
-    let column = std::str::from_utf8(&input[line_start..=index])
-        .map(|s| s.chars().count() - 1)
-        .unwrap_or_else(|_| index - line_start);
-    let column = column + column_offset;
-
-    (line, column)
-}
-*/
-
-#[derive(Error, Debug, Clone, PartialEq, Serialize, From)]
+#[derive(Debug, Clone, PartialEq, Serialize, From, OrionError)]
 pub enum OMLCodeReason {
-    #[error("{0}")]
+    #[orion_error(identity = "biz.syntax")]
     Syntax(String),
+    #[orion_error(identity = "biz.not_found")]
     #[from(skip)]
-    #[error("{0}")]
     NotFound(String),
-    #[error("{0}")]
+    #[orion_error(transparent)]
     Uvs(UvsReason),
-}
-impl ErrorCode for OMLCodeReason {
-    fn error_code(&self) -> i32 {
-        crate::codes::SysErrorCode::sys_code(self) as i32
-    }
 }
 
 pub type OMLCodeError = StructError<OMLCodeReason>;
@@ -81,8 +42,6 @@ impl From<DataErrKind> for OMLCodeReason {
     }
 }
 pub type OmlCodeResult<T> = Result<T, OMLCodeError>;
-
-// ParseError<&str, ContextError<StrContext>>
 
 impl From<OMLCodeReason> for UvsReason {
     fn from(_: OMLCodeReason) -> Self {

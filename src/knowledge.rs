@@ -1,19 +1,13 @@
 use derive_more::From;
-use orion_error::{ErrorCode, StructError, UvsReason};
+use orion_error::{OrionError, StructError, UvsReason};
 use serde::Serialize;
-use thiserror::Error;
-#[derive(Error, Debug, Clone, PartialEq, Serialize, From)]
-pub enum KnowledgeReason {
-    #[error("not data")]
-    NotData,
-    #[error("{0}")]
-    Uvs(UvsReason),
-}
 
-impl ErrorCode for KnowledgeReason {
-    fn error_code(&self) -> i32 {
-        crate::codes::SysErrorCode::sys_code(self) as i32
-    }
+#[derive(Debug, Clone, PartialEq, Serialize, From, OrionError)]
+pub enum KnowledgeReason {
+    #[orion_error(identity = "biz.not_data", message = "not data")]
+    NotData,
+    #[orion_error(transparent)]
+    Uvs(UvsReason),
 }
 
 pub type KnowledgeError = StructError<KnowledgeReason>;
