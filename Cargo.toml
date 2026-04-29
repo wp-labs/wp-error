@@ -19,13 +19,13 @@ name = "wp_error"
 
 
 [dependencies]
-orion-error = "0.6"
-orion-sec = "0.4"
+orion-error = "0.7"
+orion-sec = "0.5"
 
-wp-log = "0.2"
-orion_conf =  { version = "0.5", features = ["toml"]}
+wp-log = "0.3"
+orion_conf =  { version = "0.6", features = ["toml"]}
 derive_more = "2.1"
-wp-connector-api =  "0.8"
+wp-connector-api =  "0.9"
 
 unicode-segmentation = "1.12"
 serde = { version = "1.0", features = ["derive"] }
