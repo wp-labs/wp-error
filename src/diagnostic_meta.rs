@@ -2,7 +2,7 @@ use std::path::Path;
 
 use orion_error::OperationContext;
 use orion_error::report::DiagnosticReport;
-use orion_error::runtime::SourceFrame;
+use orion_error::runtime::source::SourceFrame;
 
 pub mod key {
     pub const CONFIG_KIND: &str = "config.kind";
@@ -321,12 +321,10 @@ impl OperationContextMetaExt for OperationContext {
 }
 
 pub fn first_meta_str<'a>(report: &'a DiagnosticReport, key: &str) -> Option<&'a str> {
-    report.root_metadata.get_str(key).or_else(|| {
-        report
-            .source_frames
-            .iter()
-            .find_map(|frame| frame.metadata.get_str(key))
-    })
+    report
+        .context()
+        .iter()
+        .find_map(|ctx| ctx.metadata().get_str(key))
 }
 
 pub fn first_meta_enum<M: MetaValue>(report: &DiagnosticReport) -> Option<M> {
@@ -344,7 +342,9 @@ pub fn frame_meta_enum<M: MetaValue>(frame: &SourceFrame) -> Option<M> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use orion_error::types::ErrorMetadata;
+    use orion_error::UnifiedReason;
+    use orion_error::conversion::ToStructError;
+    use orion_error::runtime::ErrorMetadata;
 
     #[test]
     fn config_kind_round_trip() {
@@ -380,19 +380,12 @@ mod tests {
 
     #[test]
     fn first_meta_enum_prefers_root_metadata() {
-        let mut root = ErrorMetadata::new();
-        root.insert(key::CONFIG_KIND, ConfigKind::SinkRoute.as_str());
-
-        let report = DiagnosticReport {
-            reason: "configuration error".to_string(),
-            detail: None,
-            position: None,
-            want: None,
-            path: None,
-            context: Vec::new(),
-            root_metadata: root,
-            source_frames: Vec::new(),
-        };
+        let ctx = OperationContext::doing("load").with_meta_value(ConfigKind::SinkRoute);
+        let err = UnifiedReason::core_conf()
+            .to_err()
+            .with_detail("configuration error")
+            .with_context(&ctx);
+        let report = err.report();
 
         assert_eq!(
             first_meta_enum::<ConfigKind>(&report),
@@ -407,15 +400,15 @@ mod tests {
 
         let frame = SourceFrame {
             index: 0,
-            message: "configuration error".to_string(),
+            message: "configuration error".into(),
             display: None,
-            debug: String::new(),
+            debug: None,
             type_name: None,
             error_code: None,
             reason: None,
-            want: None,
             path: None,
             detail: None,
+            context_fields: Vec::new(),
             metadata,
             is_root_cause: true,
         };

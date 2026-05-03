@@ -1,4 +1,3 @@
-use orion_error::types::ErrStrategy;
 use serde::{Deserialize, Serialize};
 use std::{
     fmt::Formatter,
@@ -12,16 +11,6 @@ pub enum ErrorHandlingStrategy {
     Throw,
     Ignore,
     Terminate,
-}
-
-impl From<ErrStrategy> for ErrorHandlingStrategy {
-    fn from(value: ErrStrategy) -> Self {
-        match value {
-            ErrStrategy::Retry => ErrorHandlingStrategy::FixRetry,
-            ErrStrategy::Ignore => ErrorHandlingStrategy::Ignore,
-            ErrStrategy::Throw => ErrorHandlingStrategy::Throw,
-        }
-    }
 }
 
 static ROBUST_MODE: AtomicU8 = AtomicU8::new(0);
@@ -162,17 +151,5 @@ mod tests {
         let mode = RobustnessMode::Normal;
         let cloned = mode.clone();
         assert_eq!(mode, cloned);
-    }
-
-    #[test]
-    fn test_error_handling_strategy_from_err_strategy() {
-        let retry: ErrorHandlingStrategy = ErrStrategy::Retry.into();
-        matches!(retry, ErrorHandlingStrategy::FixRetry);
-
-        let ignore: ErrorHandlingStrategy = ErrStrategy::Ignore.into();
-        matches!(ignore, ErrorHandlingStrategy::Ignore);
-
-        let throw: ErrorHandlingStrategy = ErrStrategy::Throw.into();
-        matches!(throw, ErrorHandlingStrategy::Throw);
     }
 }

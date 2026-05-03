@@ -1,5 +1,5 @@
 use derive_more::From;
-use orion_error::{OrionError, StructError, UvsFrom, UvsReason};
+use orion_error::{OrionError, StructError, UnifiedReason};
 use serde::Serialize;
 use thiserror::Error;
 
@@ -11,7 +11,7 @@ pub enum OMLCodeReason {
     #[from(skip)]
     NotFound(String),
     #[orion_error(transparent)]
-    Uvs(UvsReason),
+    Uvs(UnifiedReason),
 }
 
 pub type OMLCodeError = StructError<OMLCodeReason>;
@@ -38,13 +38,13 @@ pub enum DataErrKind {
 }
 impl From<DataErrKind> for OMLCodeReason {
     fn from(_: DataErrKind) -> Self {
-        OMLCodeReason::from_data()
+        OMLCodeReason::data_error()
     }
 }
 pub type OmlCodeResult<T> = Result<T, OMLCodeError>;
 
-impl From<OMLCodeReason> for UvsReason {
+impl From<OMLCodeReason> for UnifiedReason {
     fn from(_: OMLCodeReason) -> Self {
-        UvsReason::from_res()
+        UnifiedReason::resource_error()
     }
 }

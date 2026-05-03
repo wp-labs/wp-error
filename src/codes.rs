@@ -162,7 +162,7 @@ impl SysErrorCode for OrionSecReason {
     fn sys_code(&self) -> u16 {
         match self {
             OrionSecReason::Sec(_) => plan::security::SEC,
-            OrionSecReason::Uvs(_) => plan::security::UVS,
+            OrionSecReason::General(_) => plan::security::UVS,
         }
     }
 }
@@ -265,7 +265,7 @@ impl SysErrorCode for RR {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use orion_error::{UvsFrom, UvsReason};
+    use orion_error::UnifiedReason;
     use std::marker::PhantomData;
 
     #[test]
@@ -297,7 +297,7 @@ mod tests {
 
     #[test]
     fn test_conf_core_uvs_code() {
-        let reason: ConfReason<ConfCore> = ConfReason::Uvs(UvsReason::from_logic());
+        let reason: ConfReason<ConfCore> = ConfReason::Uvs(UnifiedReason::logic_error());
         assert_eq!(reason.sys_code(), 50001);
     }
 
@@ -323,7 +323,7 @@ mod tests {
 
     #[test]
     fn test_conf_feature_uvs_code() {
-        let reason: ConfReason<ConfFeature> = ConfReason::Uvs(UvsReason::from_logic());
+        let reason: ConfReason<ConfFeature> = ConfReason::Uvs(UnifiedReason::logic_error());
         assert_eq!(reason.sys_code(), 50002);
     }
 
@@ -343,7 +343,7 @@ mod tests {
 
     #[test]
     fn test_conf_dynamic_uvs_code() {
-        let reason: ConfReason<ConfDynamic> = ConfReason::Uvs(UvsReason::from_logic());
+        let reason: ConfReason<ConfDynamic> = ConfReason::Uvs(UnifiedReason::logic_error());
         assert_eq!(reason.sys_code(), 50003);
     }
 
@@ -363,7 +363,7 @@ mod tests {
 
     #[test]
     fn test_oml_uvs_code() {
-        let reason = OMLCodeReason::Uvs(UvsReason::from_logic());
+        let reason = OMLCodeReason::Uvs(UnifiedReason::logic_error());
         assert_eq!(reason.sys_code(), 50011);
     }
 
@@ -473,7 +473,7 @@ mod tests {
 
     #[test]
     fn test_knowledge_uvs_code() {
-        let reason = KnowledgeReason::Uvs(UvsReason::from_logic());
+        let reason = KnowledgeReason::Uvs(UnifiedReason::logic_error());
         assert_eq!(reason.sys_code(), 50041);
     }
 
@@ -523,7 +523,7 @@ mod tests {
 
     #[test]
     fn test_run_uvs_code() {
-        let reason = RR::Uvs(UvsReason::from_logic());
+        let reason = RR::Uvs(UnifiedReason::logic_error());
         assert_eq!(reason.sys_code(), 50041);
     }
 }

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Bump orion-error from 0.7 to 0.8; rename `UvsReason` → `UnifiedReason`
+- Replace `ErrStrategy` with `ErrorHandlingStrategy` (type removed in 0.8)
+- Use delegate constructors (`core_conf()`, `data_error()`, `resource_error()`, `logic_error()`) instead of legacy `UvsFrom` methods (`from_conf_reason`, `from_data`, `from_res`, `from_logic`)
+- Replace `StructError::from(reason)` with `reason.to_err()`
+- Update `DiagnosticReport` field access to public getters (fields are private in 0.8)
+- Update `SourceFrame` import path: `runtime` → `runtime::source`
+- Update `ErrorMetadata` import path: `types` → `runtime`
+- Match renamed variants: `ConfIOReason::Uvs` → `General`, `OrionSecReason::Uvs` → `General`
+
+### Removed
+- Remove `UvsFrom` and `ConfErrReason` imports (removed in 0.8)
+- Remove `From<ErrStrategy> for ErrorHandlingStrategy` impl (type removed in 0.8)
+
 ## [0.9.0] - 2026-04-30
 
 ### Changed

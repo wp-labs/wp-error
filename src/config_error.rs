@@ -2,8 +2,8 @@ use std::fmt::Debug;
 use std::marker::PhantomData;
 
 use derive_more::From;
-use orion_error::reason::ConfErrReason;
-use orion_error::{OrionError, StructError, UvsFrom, UvsReason};
+
+use orion_error::{OrionError, StructError, UnifiedReason};
 use serde::Serialize;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -28,7 +28,7 @@ pub enum ConfReason<T: Clone + PartialEq + Debug + Send + Sync + 'static> {
     #[from(skip)]
     NotFound(String),
     #[orion_error(transparent)]
-    Uvs(UvsReason),
+    Uvs(UnifiedReason),
     #[orion_error(identity = "conf.take")]
     _Take(PhantomData<T>),
 }
@@ -45,19 +45,19 @@ pub type ConfResult<T> = Result<T, ConfError>;
 pub type DynConfResult<T> = Result<T, DynamicConfError>;
 pub type FeatureConfResult<T> = Result<T, FeatureConfError>;
 
-impl From<ConfReason<ConfCore>> for UvsReason {
+impl From<ConfReason<ConfCore>> for UnifiedReason {
     fn from(_: ConfReason<ConfCore>) -> Self {
-        UvsReason::from_conf_reason(ConfErrReason::Core)
+        UnifiedReason::core_conf()
     }
 }
-impl From<ConfReason<ConfFeature>> for UvsReason {
+impl From<ConfReason<ConfFeature>> for UnifiedReason {
     fn from(_: ConfReason<ConfFeature>) -> Self {
-        UvsReason::feature_conf()
+        UnifiedReason::feature_conf()
     }
 }
-impl From<ConfReason<ConfDynamic>> for UvsReason {
+impl From<ConfReason<ConfDynamic>> for UnifiedReason {
     fn from(_: ConfReason<ConfDynamic>) -> Self {
-        UvsReason::dynamic_conf()
+        UnifiedReason::dynamic_conf()
     }
 }
 
