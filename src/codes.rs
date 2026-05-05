@@ -203,9 +203,9 @@ impl SysErrorCode for SourceReason {
         match self {
             SourceReason::NotData => plan::source::NOT_DATA,
             SourceReason::EOF => plan::source::EOF,
-            SourceReason::SupplierError(_) => plan::source::SUPPLIER_ERROR,
-            SourceReason::Disconnect(_) => plan::source::DISCONNECT,
-            SourceReason::Other(_) => plan::source::OTHER,
+            SourceReason::SupplierError => plan::source::SUPPLIER_ERROR,
+            SourceReason::Disconnect => plan::source::DISCONNECT,
+            SourceReason::Other => plan::source::OTHER,
             SourceReason::Uvs(_) => plan::source::UVS,
         }
     }
@@ -218,7 +218,7 @@ impl SysErrorCode for SourceReason {
 impl SysErrorCode for SinkReason {
     fn sys_code(&self) -> u16 {
         match self {
-            SinkReason::Sink(_) => plan::dist::SINK_ERROR,
+            SinkReason::Sink => plan::dist::SINK_ERROR,
             SinkReason::Mock => plan::dist::MOCK,
             SinkReason::StgCtrl => plan::dist::STG_CTRL,
             SinkReason::Uvs(_) => plan::dist::UVS,
@@ -427,26 +427,26 @@ mod tests {
 
     #[test]
     fn test_source_supplier_error_code() {
-        let reason = SourceReason::SupplierError("supplier failed".into());
+        let reason = SourceReason::SupplierError;
         assert_eq!(reason.sys_code(), 50201);
     }
 
     #[test]
     fn test_source_disconnect_code() {
-        let reason = SourceReason::Disconnect("connection lost".into());
+        let reason = SourceReason::Disconnect;
         assert_eq!(reason.sys_code(), 49901);
     }
 
     #[test]
     fn test_source_other_code() {
-        let reason = SourceReason::Other("unknown".into());
+        let reason = SourceReason::Other;
         assert_eq!(reason.sys_code(), 50209);
     }
 
     // SinkReason tests
     #[test]
     fn test_sink_sink_code() {
-        let reason = SinkReason::Sink("sink failed".into());
+        let reason = SinkReason::Sink;
         assert_eq!(reason.sys_code(), 50211);
         assert_eq!(reason.sys_tag(), "dist");
     }

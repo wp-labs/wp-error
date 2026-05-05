@@ -22,9 +22,9 @@ fn test_sys_codes_conf_and_parse() {
 fn test_sys_codes_source_and_run() {
     let s = SourceReason::NotData;
     assert_eq!(s.sys_code(), 20401);
-    let s = SourceReason::Disconnect("net".into());
+    let s = SourceReason::Disconnect;
     assert_eq!(s.sys_code(), 49901);
-    let s = SourceReason::Other("weird".into());
+    let s = SourceReason::Other;
     assert_eq!(s.sys_code(), 50209);
 
     let r = RunReason::Dist(DistFocus::StgCtrl);
@@ -52,7 +52,7 @@ fn test_dist_mock_to_run() {
 
 #[test]
 fn test_source_other_preserves_code() {
-    let rr: RunReason = SourceReason::Other("strange".into()).into();
+    let rr: RunReason = SourceReason::Other.into();
     assert_eq!(rr.sys_code(), 50209);
 }
 

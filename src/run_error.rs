@@ -99,7 +99,7 @@ pub trait Option2RunResult<T> {
 
 impl<T> Option2RunResult<T> for Option<T> {
     fn owe_logic(self, msg: &str) -> RunResult<T> {
-        self.ok_or(RunError::from(UvsReason::from_logic(msg.to_string())))
+        self.ok_or(RunError::from(UnifiedReason::from_logic(msg.to_string())))
     }
 }
 
@@ -109,9 +109,9 @@ impl From<SourceReason> for RunReason {
         match e {
             SourceReason::NotData => Self::Source(SourceFocus::NoData),
             SourceReason::EOF => Self::Source(SourceFocus::Eof),
-            SourceReason::SupplierError(info) => Self::Source(SourceFocus::SupplierError(info)),
-            SourceReason::Disconnect(info) => Self::Source(SourceFocus::Disconnect(info)),
-            SourceReason::Other(info) => Self::Source(SourceFocus::Other(info)),
+            SourceReason::SupplierError => Self::Source(SourceFocus::SupplierError(String::new())),
+            SourceReason::Disconnect => Self::Source(SourceFocus::Disconnect(String::new())),
+            SourceReason::Other => Self::Source(SourceFocus::Other(String::new())),
             SourceReason::Uvs(uvs) => Self::Uvs(uvs),
         }
         //Self::Domain(RunReason::Source(e))
@@ -121,7 +121,7 @@ impl From<SourceReason> for RunReason {
 impl From<SinkReason> for RunReason {
     fn from(e: SinkReason) -> Self {
         match e {
-            SinkReason::Sink(info) => Self::Dist(DistFocus::SinkError(info)),
+            SinkReason::Sink => Self::Dist(DistFocus::SinkError(String::new())),
             // Map mock to stage control path for now (no panic in production paths)
             SinkReason::Mock => Self::Dist(DistFocus::StgCtrl),
             SinkReason::StgCtrl => Self::Dist(DistFocus::StgCtrl),
