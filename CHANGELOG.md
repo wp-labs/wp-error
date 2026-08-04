@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-08-04
+
+### Changed
+- Bump `wp-connector-api` from `0.10` to `0.12` (adds `BatchMeta`,
+  `AsyncRecordSink::sink_records_with_meta`, and the `wp-source-types` / `wp-model-core` 0.9
+  upgrades); `SourceReason`/`SinkReason` mapping unchanged
+
 ## [0.10.1] - 2026-05-05
 
 ### Changed
@@ -38,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ErrorCode` trait no longer supported; numeric code assertions removed from
   integration tests
 
-[Unreleased]: https://github.com/wp-labs/wp-error/compare/v0.10.1...HEAD
+[Unreleased]: https://github.com/wp-labs/wp-error/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/wp-labs/wp-error/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/wp-labs/wp-error/compare/v0.9.0...v0.10.1
 [0.9.0]: https://github.com/wp-labs/wp-error/releases/tag/v0.9.0
