@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.11.1] - 2026-08-11
+
+### Added
+- `IntoRunError` trait: converts `OMLCodeError`, `ConfError`, and `orion_conf::OrionConfError` into `RunError` while preserving the inner parse detail as the `detail` field and keeping the original error as the source. `conv_err()` maps reasons via `From<XReason> for RunReason` and drops inner messages, so OML/config parse errors previously surfaced only as a generic "配置错误"; the trait retains the concrete parse error (`[path]/[where]/[error]` for OML, toml parse errors for config, etc.) at the load path.
+
+### Tests
+- Added unit tests for `IntoRunError` covering OML syntax detail, config (`ConfReason`) syntax detail, and `ConfIOReason::Other` (toml) detail preservation.
 
 ## [0.11.0] - 2026-08-04
 
