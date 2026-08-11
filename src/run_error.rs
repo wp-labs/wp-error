@@ -1,5 +1,5 @@
-use crate::parse_error::OMLCodeReason;
-use crate::{ConfReason, config_error::ConfCore};
+use crate::config_error::{ConfCore, ConfError, ConfReason};
+use crate::parse_error::{OMLCodeError, OMLCodeReason};
 use derive_more::From;
 
 use orion_error::{OrionError, StructError, UnifiedReason};
@@ -50,6 +50,61 @@ impl From<ConfReason<ConfCore>> for RunReason {
 impl From<OMLCodeReason> for RunReason {
     fn from(_: OMLCodeReason) -> Self {
         Self::core_conf()
+    }
+}
+
+/// 将 OML 错误转换为 `RunError`，并保留解析详情。
+///
+/// `conv_err()` 仅按 reason 转换（`OMLCodeReason → RunReason`），
+/// 而 OML 的富错误消息（`[path]/[where]/[error]`）存放在
+/// `Syntax/NotFound` 的 inner String 中、不在 StructError 的 detail 字段里，
+/// 因此转换后会被压缩为无 detail 的配置错误。
+/// 本 trait 把 inner 消息提取为 detail 并保留 source，供加载层调用。
+pub trait IntoRunError {
+    fn into_run_err(self) -> RunError;
+}
+
+impl IntoRunError for OMLCodeError {
+    fn into_run_err(self) -> RunError {
+        let detail = match self.reason() {
+            OMLCodeReason::Syntax(s) => s.clone(),
+            OMLCodeReason::NotFound(s) => s.clone(),
+            OMLCodeReason::Uvs(_) => self.to_string(),
+        };
+        RunReason::core_conf()
+            .to_err()
+            .with_detail(detail)
+            .with_source(self)
+    }
+}
+
+impl IntoRunError for ConfError {
+    fn into_run_err(self) -> RunError {
+        // 与 OML 同构：Syntax/NotFound 的内层消息才是真正的解析详情
+        let detail = match self.reason() {
+            ConfReason::Syntax(s) => s.clone(),
+            ConfReason::NotFound(s) => s.clone(),
+            ConfReason::Uvs(_) | ConfReason::_Take(_) => self.to_string(),
+        };
+        RunReason::core_conf()
+            .to_err()
+            .with_detail(detail)
+            .with_source(self)
+    }
+}
+
+impl IntoRunError for orion_conf::OrionConfError {
+    fn into_run_err(self) -> RunError {
+        // ConfIOReason::Other 携带底层解析错误（如 toml 语法错误），
+        // 转换时若丢弃则错误提示只剩泛化的 "配置错误"
+        let detail = match self.reason() {
+            orion_conf::ConfIOReason::Other(s) => s.clone(),
+            _ => self.to_string(),
+        };
+        RunReason::core_conf()
+            .to_err()
+            .with_detail(detail)
+            .with_source(self)
     }
 }
 
@@ -139,5 +194,62 @@ impl From<ConfIOReason> for RunReason {
             ConfIOReason::General(uvs) => RunReason::Uvs(uvs),
             ConfIOReason::NoFormatEnabled => RunReason::core_conf(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::parse_error::OMLCodeReason;
+
+    #[test]
+    fn into_run_err_preserves_syntax_detail() {
+        let err = OMLCodeReason::Syntax(":oml code parse fail!\n[where]: line 5".into()).to_err();
+        let run = err.into_run_err();
+        assert!(
+            run.detail()
+                .as_deref()
+                .is_some_and(|d| d.contains("line 5")),
+            "detail should carry the OML inner message, got {:?}",
+            run.detail()
+        );
+    }
+
+    #[test]
+    fn into_run_err_keeps_config_reason() {
+        let err = OMLCodeReason::NotFound("missing file".into()).to_err();
+        let run = err.into_run_err();
+        assert!(
+            format!("{}", run.reason()).contains("config"),
+            "reason should stay a config error, got {}",
+            run.reason()
+        );
+    }
+
+    #[test]
+    fn conf_into_run_err_preserves_syntax_detail() {
+        let err = ConfReason::<ConfCore>::Syntax("invalid [sources] block".into()).to_err();
+        let run = err.into_run_err();
+        assert!(
+            run.detail()
+                .as_deref()
+                .is_some_and(|d| d.contains("invalid [sources] block")),
+            "ConfError detail should carry the inner message, got {:?}",
+            run.detail()
+        );
+    }
+
+    #[test]
+    fn conf_io_into_run_err_preserves_other_detail() {
+        use orion_conf::ConfIOReason;
+        let err = ConfIOReason::Other("expected `]` at line 2".into()).to_err();
+        let run = err.into_run_err();
+        assert!(
+            run.detail()
+                .as_deref()
+                .is_some_and(|d| d.contains("expected `]`")),
+            "ConfIOError detail should carry the toml error, got {:?}",
+            run.detail()
+        );
     }
 }
