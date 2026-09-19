@@ -1,8 +1,11 @@
 # wp_err - 错误处理库
 
-![CI](https://github.com/wp-labs/wp-error/workflows/CI/badge.svg)
+[![Crates.io](https://img.shields.io/crates/v/wp-error.svg)](https://crates.io/crates/wp-error)
+[![CI](https://img.shields.io/github/actions/workflow/status/wp-labs/wp-error/ci.yml?branch=main)](https://github.com/wp-labs/wp-error/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/wp-labs/wp-error/graph/badge.svg?token=6SVCXBHB6B)](https://codecov.io/gh/wp-labs/wp-error)
-[![License](https://img.shields.io/badge/license-Elasticsearch_2.0-blue)](LICENSE)
+[![Crates.io downloads](https://img.shields.io/crates/d/wp-error)](https://crates.io/crates/wp-error)
+![License](https://img.shields.io/badge/license-Elastic--2.0-green.svg)
+[![Rust Edition](https://img.shields.io/badge/edition-2024-orange.svg)](https://doc.rust-lang.org/edition-guide/rust-2024/index.html)
 
 `wp_err` 是从 warp-parse 数据处理平台拆分出来的综合性错误处理库，面向配置、解析、数据源和分发等领域，提供结构化错误类型、统一的系统错误码以及健壮性策略。该 crate 现在可以独立发布到 crates.io，用于任何需要领域化错误建模和策略化处理的 Rust 项目。
 

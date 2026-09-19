@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2026-09-19
+
+### ⚠️ BREAKING CHANGES
+
+- Bump `wp-connector-api` from `0.12` to `0.13`, which in turn aligns to `wp-model-core` 0.10 (the integer variant was renamed `Value::Digit` → `Value::Int`, `from_digit` → `from_int`, serde name `"digit"` → `"int"`) and to `wp-source-types` 0.3. This crate re-maps `wp_connector_api::{SinkReason, SourceReason}` inside its public `RunReason`, so downstream crates must move to `wp-model-core` 0.10 as well — otherwise the dependency graph holds both 0.9 and 0.10 and the cross-version public types collide at compile time.
+
+### Changed
+
+- README: add the standard badge set (crates.io, crates.io downloads, Rust Edition) and switch the CI badge from `workflows/CI/badge.svg` (no link) to the modern `actions/workflow/status/.../ci.yml?branch=main` form linked to the Actions workflow. The license badge previously read `license-Elasticsearch_2.0` (a product name used as a license name) and linked to a `LICENSE` file that does not exist in this repository; it now reads `Elastic-2.0` and is rendered without a link.
+
+### Dependencies
+
+- `wp-connector-api`: `0.12` → `0.13`
+
 ## [0.11.1] - 2026-08-11
 
 ### Added
@@ -51,7 +65,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ErrorCode` trait no longer supported; numeric code assertions removed from
   integration tests
 
-[Unreleased]: https://github.com/wp-labs/wp-error/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/wp-labs/wp-error/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/wp-labs/wp-error/compare/v0.11.1...v0.12.0
+[0.11.1]: https://github.com/wp-labs/wp-error/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/wp-labs/wp-error/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/wp-labs/wp-error/compare/v0.9.0...v0.10.1
 [0.9.0]: https://github.com/wp-labs/wp-error/releases/tag/v0.9.0
