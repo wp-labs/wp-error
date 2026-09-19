@@ -4,7 +4,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/wp-labs/wp-error/ci.yml?branch=main)](https://github.com/wp-labs/wp-error/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/wp-labs/wp-error/graph/badge.svg?token=6SVCXBHB6B)](https://codecov.io/gh/wp-labs/wp-error)
 [![Crates.io downloads](https://img.shields.io/crates/d/wp-error)](https://crates.io/crates/wp-error)
-![License](https://img.shields.io/badge/license-Elastic--2.0-green.svg)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust Edition](https://img.shields.io/badge/edition-2024-orange.svg)](https://doc.rust-lang.org/edition-guide/rust-2024/index.html)
 
 `wp_err` 是从 warp-parse 数据处理平台拆分出来的综合性错误处理库，面向配置、解析、数据源和分发等领域，提供结构化错误类型、统一的系统错误码以及健壮性策略。该 crate 现在可以独立发布到 crates.io，用于任何需要领域化错误建模和策略化处理的 Rust 项目。
@@ -118,4 +118,4 @@ let prev = set_system_robustness_mode(RobustnessMode::Strict);
 
 ## 许可证
 
-wp_err 在 Elastic License 2.0 下发布，详情参见项目根目录的 `LICENSE` 文件。
+wp_err 在 Apache License 2.0 下发布，详情参见项目根目录的 [`LICENSE`](LICENSE) 文件。

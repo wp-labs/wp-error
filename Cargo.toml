@@ -2,7 +2,7 @@
 name = "wp-error"
 version = "0.12.0" # @gxl:set(version)
 edition = "2024"
-license = "Elastic-2.0"
+license = "Apache-2.0"
 authors = ["WarpParse Dev Team"]
 description = "Structured, domain-specific error types and robustness strategies extracted from WarpParse"
 documentation = "https://docs.rs/wp-error"

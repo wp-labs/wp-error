@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- README: add the standard badge set (crates.io, crates.io downloads, Rust Edition) and switch the CI badge from `workflows/CI/badge.svg` (no link) to the modern `actions/workflow/status/.../ci.yml?branch=main` form linked to the Actions workflow. The license badge previously read `license-Elasticsearch_2.0` (a product name used as a license name) and linked to a `LICENSE` file that does not exist in this repository; it now reads `Elastic-2.0` and is rendered without a link.
+- **Relicensed from Elastic License 2.0 to Apache License 2.0**: `Cargo.toml` now declares `license = "Apache-2.0"`, the repository ships the standard Apache-2.0 text as `LICENSE` (it previously had no `LICENSE` file at all, while `Cargo.toml` and the README both claimed `Elastic-2.0`), and the README license badge and license section follow suit.
+- README: add the standard badge set (crates.io, crates.io downloads, Rust Edition) and switch the CI badge from `workflows/CI/badge.svg` (no link) to the modern `actions/workflow/status/.../ci.yml?branch=main` form linked to the Actions workflow. The license badge previously read `license-Elasticsearch_2.0` — a product name used as a license name — and linked to a `LICENSE` file that did not exist in this repository; it now reads `Apache-2.0` and links to the newly added `LICENSE`.
 
 ### Dependencies
 
